@@ -8,7 +8,7 @@ def upload_files():
             "jobId": "455",
             "accessionId": "444"
             }
-    files = {'file':open(r'C:\\Users\Administrator\Documents\\Tencent Files\\2235826534\\FileRecv\\PRIDE_Exp_Complete_Ac_27179.xml','rb')}
+    files = {'file':open(r'E:\\PRIDE_Exp_Complete_Ac_27179.xml','rb')}
     url = 'http://enhancer.ncpsb.org:8090/example/v1/file/upload'
     r = requests.post(url, files=files, headers=header)
     return r
