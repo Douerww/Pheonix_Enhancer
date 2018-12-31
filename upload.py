@@ -8,7 +8,7 @@ def upload_files():
             "jobId": "455",
             "accessionId": "444"
             }
-    files = {'file':open(r'C:\\Users\\31438\\Desktop\\PRIDE_Exp_Complete_Ac_27179.xml','rb')}
+    files = {'file':open(r'C:\\Users\Administrator\\Documents\\Tencent Files\\2235826534\\FileRecv\\test1.xml','rb')}
     url = 'http://enhancer.ncpsb.org:8090/example/v1/file/upload'
     r = requests.post(url, files=files, headers=header)
     return r
@@ -38,9 +38,15 @@ def confirm_files():
 def main():
     res = upload_files()
     print(res.text)
-    res2 = confirm_files() 
-    print(res2.text)
+    # res2 = confirm_files() 
+    # print(res2.text)
 
 
 if __name__ == '__main__':
     main()
+
+
+
+
+#     curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'jobId: 122' -d '{"fileList": ["file"], 
+# "fileListLength": 1}' 'http://enhancer.ncpsb.org:8090/example/v1/file/confirmFiles'
