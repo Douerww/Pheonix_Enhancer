@@ -2,33 +2,42 @@
 import requests, json
 
 
-def upload_files():
-    header={ 
-           "Accept": "*/*",
-            "jobId": "455",
-            "accessionId": "444"
-            }
-    files = {'file':open(r'C:\\Users\Administrator\\Documents\\Tencent Files\\2235826534\\FileRecv\\test1.xml','rb')}
-    url = 'http://enhancer.ncpsb.org:8090/example/v1/file/upload'
-    r = requests.post(url, files=files, headers=header)
+def applyID():
+    header={
+        "Accept": "application/json"
+    }
+    url = "http://enhancer.ncpsb.org:8090/example/v1/file/apply"
+    r = requests.get(url,headers=header)
     return r
 
 
-def confirm_files():
+def upload_files(contents):
+    header={ 
+           "Accept": "*/*",
+            "jobId": str(contents['id']),
+            "accessionId": str(contents['accessionId']),
+            }
+    files = {'file':open(r'C:\\Users\\Administrator\\Documents\\Tencent Files\\2235826534\\FileRecv\\test1.xml','rb')}
+    url = 'http://enhancer.ncpsb.org:8090/example/v1/file/upload'
+    r = requests.post(url, files=files, headers=header)
+    print(r.text)
+    rcon = confirm_files(r.json()['id'],list(files.keys()))
+
+    return r
+
+
+def confirm_files(id,files):
     confirm_url = 'http://enhancer.ncpsb.org:8090/example/v1/file/confirmFiles'
 
     comfirm_header = {
-                
                     "Accept": "application/json",
-                    "jobId": "455",
+                    "jobId": str(id),
                     }
     data={
-        'jobId':'455',
+        'jobId':id,
         'resultFileList':{
-                        "fileList": [
-                         "233"
-                        ],
-                        "fileListLength": 1
+                        "fileList": files,
+                        "fileListLength": len(files)
                         }
         }
     r = requests.post(confirm_url, data=json.dumps(data), headers=comfirm_header)
@@ -36,17 +45,15 @@ def confirm_files():
 
 
 def main():
-    res = upload_files()
+    resJson = applyID().json()
+    print(resJson)
+    print('_______________________')
+    res = upload_files(resJson)
     print(res.text)
-    # res2 = confirm_files() 
-    # print(res2.text)
 
 
 if __name__ == '__main__':
     main()
 
 
-
-
-#     curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'jobId: 122' -d '{"fileList": ["file"], 
-# "fileListLength": 1}' 'http://enhancer.ncpsb.org:8090/example/v1/file/confirmFiles'
+# curl -H "Content-Type: application/json" -H "Accept: application/json" -H "jobId: 123" -X POST  -d "{\"fileList\":[\"file\"],\"fileListLength\":1}" "http://enhancer.ncpsb.org:8090/example/v1/file/confirmFiles"
